@@ -13,3 +13,12 @@ _CRUD_ operations
 - POST "/projects/:id/tasks" - given **title** and **id** of a project, store a new task inside tasks array
 
 #### Middlewares
+
+- Check if user exists by its ID
+- Keep track of number of requests made and console log them
+
+#####
+
+_scripts_
+
+yarn dev - nodemon index.js
