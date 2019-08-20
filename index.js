@@ -8,17 +8,17 @@ const allProjects = [
   {
     id: 1,
     title: 'Test',
-    task: []
+    tasks: []
   },
   {
     id: 2,
     title: 'More test',
-    task: []
+    tasks: []
   },
   {
     id: 3,
     title: 'Even more tests : )',
-    task: []
+    tasks: []
   }
 ];
 
@@ -30,7 +30,6 @@ app.get('/projects', (req, res) => {
 //POST - create new project
 app.post('/projects', (req, res) => {
   const { id, title } = req.body;
-
   const project = {
     id,
     title,
@@ -38,7 +37,6 @@ app.post('/projects', (req, res) => {
   };
 
   allProjects.push(project);
-
   return res.json(allProjects);
 });
 
@@ -46,20 +44,30 @@ app.post('/projects', (req, res) => {
 app.put('/projects/:id', (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
-
   const project = allProjects.find(one => one.id == id);
-
   project.title = title;
+  return res.json(allProjects);
+});
 
+//DELETE - delete one project by its Id
+app.delete('/projects/:id', (req, res) => {
+  const { id } = req.params;
+  const index = allProjects.findIndex(i => i.id == id);
+  allProjects.splice(index, 1);
+  return res.json(allProjects);
+});
+
+//POST - add new task to a project by its Id
+app.post('/projects/:id', (req, res) => {
+  const { id } = req.params;
+  const { title } = req.body;
+  const project = allProjects.find(one => one.id == id);
+  project.tasks = title;
   return res.json(allProjects);
 });
 
 app.listen(3100);
 
 /*
-- POST "/projects" - { id: "1", title: "New Project", tasks: [] };
-- GET "/projects" - list all projects and all tasks;
-- PUT "/projects/:id" - edit **Title** in project with given Id;
-- DELETE "/projects/:id" - delete project with given Id;
 - POST "/projects/:id/tasks" - given **title** and **id** of a project, store a new task inside tasks array
 */
