@@ -4,7 +4,7 @@ const app = express();
 
 app.use(express.json());
 
-const reqCount = 0;
+let reqCount = 0;
 const allProjects = [
   {
     id: 1,
@@ -26,12 +26,20 @@ const allProjects = [
 //Middleware count log requests
 function countRequests(req, res, next) {
   reqCount++;
-  console.log(`${reqCount} requested so far`);
+  console.log(`${reqCount} requests so far`);
   return next();
 }
 app.use(countRequests);
 
 //Middleware to check if project extists by its Id
+function checkUserId(req, res, next) {
+  const { id } = req.params;
+  const project = allProjects.find(one => one.id == id);
+  if (!project) {
+    return res.status(400).json({ message: 'No matching project found' });
+  }
+  return next();
+}
 
 //GET - list all projects
 app.get('/projects', (req, res) => {
@@ -52,7 +60,7 @@ app.post('/projects', (req, res) => {
 });
 
 //PUT - edit title one project
-app.put('/projects/:id', (req, res) => {
+app.put('/projects/:id', checkUserId, (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
   const project = allProjects.find(one => one.id == id);
@@ -61,7 +69,7 @@ app.put('/projects/:id', (req, res) => {
 });
 
 //DELETE - delete one project by its Id
-app.delete('/projects/:id', (req, res) => {
+app.delete('/projects/:id', checkUserId, (req, res) => {
   const { id } = req.params;
   const index = allProjects.findIndex(i => i.id == id);
   allProjects.splice(index, 1);
@@ -69,7 +77,7 @@ app.delete('/projects/:id', (req, res) => {
 });
 
 //POST - add new task to a project by its Id
-app.post('/projects/:id', (req, res) => {
+app.post('/projects/:id', checkUserId, (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
   const project = allProjects.find(one => one.id == id);
@@ -78,7 +86,3 @@ app.post('/projects/:id', (req, res) => {
 });
 
 app.listen(3100);
-
-/*
-- POST "/projects/:id/tasks" - given **title** and **id** of a project, store a new task inside tasks array
-*/
