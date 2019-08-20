@@ -62,7 +62,7 @@ app.post('/projects/:id', (req, res) => {
   const { id } = req.params;
   const { title } = req.body;
   const project = allProjects.find(one => one.id == id);
-  project.tasks = title;
+  project.tasks.push(title);
   return res.json(allProjects);
 });
 
