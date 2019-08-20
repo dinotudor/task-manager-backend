@@ -1,30 +1,49 @@
-'use-strict';
-
-const express = require('express');
-
+"use-strict";
+const express = require("express");
 const app = express();
 
-const projects = [
+app.use(express.json());
+
+const allProjects = [
   {
-    id: '1',
-    title: 'Test',
-    tasks: []
+    id: 1,
+    title: "Test",
+    task: []
   },
   {
-    id: '2',
-    title: 'More tests',
-    tasks: []
+    id: 2,
+    title: "More test",
+    task: []
   },
   {
-    id: '3',
-    title: 'Even more tests',
-    tasks: []
+    id: 3,
+    title: "Even more tests : )",
+    task: []
   }
 ];
 
-app.get('/projects', (req, res) => {
-  res.json(projects);
+//GET - list all projects
+app.get("/projects", (req, res) => {
+  res.json(allProjects);
 });
+
+//POST - create new project
+app.post("/projects", (req, res) => {
+  const { id, title } = req.body;
+
+  const project = {
+    id,
+    title,
+    tasks: []
+  };
+
+  allProjects.push(project);
+
+  return res.json(allProjects);
+});
+
+//PUT - edit title one project
+app.put("/projects/:id", () => {});
 
 app.listen(3100);
 
