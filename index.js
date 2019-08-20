@@ -4,6 +4,7 @@ const app = express();
 
 app.use(express.json());
 
+const reqCount = 0;
 const allProjects = [
   {
     id: 1,
@@ -21,6 +22,16 @@ const allProjects = [
     tasks: []
   }
 ];
+
+//Middleware count log requests
+function countRequests(req, res, next) {
+  reqCount++;
+  console.log(`${reqCount} requested so far`);
+  return next();
+}
+app.use(countRequests);
+
+//Middleware to check if project extists by its Id
 
 //GET - list all projects
 app.get('/projects', (req, res) => {
