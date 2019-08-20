@@ -1,5 +1,5 @@
-"use-strict";
-const express = require("express");
+'use-strict';
+const express = require('express');
 const app = express();
 
 app.use(express.json());
@@ -7,28 +7,28 @@ app.use(express.json());
 const allProjects = [
   {
     id: 1,
-    title: "Test",
+    title: 'Test',
     task: []
   },
   {
     id: 2,
-    title: "More test",
+    title: 'More test',
     task: []
   },
   {
     id: 3,
-    title: "Even more tests : )",
+    title: 'Even more tests : )',
     task: []
   }
 ];
 
 //GET - list all projects
-app.get("/projects", (req, res) => {
+app.get('/projects', (req, res) => {
   res.json(allProjects);
 });
 
 //POST - create new project
-app.post("/projects", (req, res) => {
+app.post('/projects', (req, res) => {
   const { id, title } = req.body;
 
   const project = {
@@ -43,7 +43,16 @@ app.post("/projects", (req, res) => {
 });
 
 //PUT - edit title one project
-app.put("/projects/:id", () => {});
+app.put('/projects/:id', (req, res) => {
+  const { id } = req.params;
+  const { title } = req.body;
+
+  const project = allProjects.find(one => one.id == id);
+
+  project.title = title;
+
+  return res.json(allProjects);
+});
 
 app.listen(3100);
 
